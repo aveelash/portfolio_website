@@ -1,0 +1,8 @@
+Project 1: Cloud-native deployment platform
+Built deployment workflows using Docker, Kubernetes, AWS EKS, and CI/CD pipelines.
+
+Project 2: Observability setup
+Worked with monitoring and logging tools to improve visibility into production systems.
+
+Project 3: Backend automation
+Built Python scripts and backend tools to automate repeated operational tasks.

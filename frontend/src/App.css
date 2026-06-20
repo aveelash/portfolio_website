@@ -1,0 +1,494 @@
+/* AveelashGPT — Claude/ChatGPT-style chat canvas */
+
+@keyframes cursor-blink-kf {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  display: inline-block;
+  animation: cursor-blink-kf 1.05s steps(1, end) infinite;
+}
+
+/* Polished Inset Scrollbars */
+.chat-scroll::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar {
+  width: 12px; /* Increased width to accommodate border spacing */
+  height: 12px;
+}
+.chat-scroll::-webkit-scrollbar-track,
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-scroll::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background-color: #3a3a3a;
+  border-radius: 9999px;
+  /* Thick transparent borders act as padding, isolating the track from the frame */
+  border: 3px solid #212121;
+}
+.chat-scroll::-webkit-scrollbar-thumb:hover,
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #4a4a4a;
+}
+
+/* Firefox Fallback Layouts */
+.chat-scroll,
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a transparent;
+}
+
+::selection {
+  background: rgba(197, 242, 80, 0.25);
+  color: #ececec;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+[data-testid^="block-"],
+[data-testid^="file-block-"],
+[data-testid="user-command"],
+[data-testid="chat-message"] {
+  animation: fade-up 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hero slide-up on session start */
+.hero-stage {
+  transition:
+    transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 320ms ease-out;
+}
+
+/* Markdown body styling */
+.prose-chat h1 {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0.25rem 0 0.5rem;
+  color: #f4f4f4;
+}
+.prose-chat h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 1rem 0 0.4rem;
+  color: #ececec;
+}
+.prose-chat h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.85rem 0 0.35rem;
+  color: #ececec;
+}
+.prose-chat p {
+  margin: 0.45rem 0;
+  color: #d1d1d1;
+  line-height: 1.65;
+}
+.prose-chat ul,
+.prose-chat ol {
+  margin: 0.4rem 0;
+  padding-left: 1.25rem;
+  color: #d1d1d1;
+}
+.prose-chat li {
+  margin: 0.15rem 0;
+  line-height: 1.6;
+}
+.prose-chat ul li::marker {
+  color: #6e6e6e;
+}
+.prose-chat strong {
+  color: #f4f4f4;
+  font-weight: 600;
+}
+.prose-chat code {
+  font-family: "JetBrains Mono", Menlo, monospace;
+  background: #2a2a2a;
+  border: 1px solid #2f2f2f;
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: #ececec;
+}
+.prose-chat pre {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  line-height: 1.55;
+  font-size: 12.5px;
+  margin: 0.6rem 0;
+}
+.prose-chat pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #d1d1d1;
+}
+.prose-chat blockquote {
+  border-left: 2px solid #3a3a3a;
+  padding-left: 0.85rem;
+  color: #b3b3b3;
+  margin: 0.5rem 0;
+}
+.prose-chat a {
+  color: #c5f250;
+  text-decoration: none;
+}
+.prose-chat a:hover {
+  text-decoration: underline;
+}
+.prose-chat hr {
+  border: 0;
+  border-top: 1px solid #2a2a2a;
+  margin: 1rem 0;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---------------- FANCY CUSTOM SCROLLBAR ---------------- */
+
+/* For WebKit Browsers (Chrome, Safari, Edge, Opera) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Keeps the scrollbar thin and elegant */
+  height: 6px; /* For horizontal scrollbars if any */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0b0e13; /* Matches your main background color exactly */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2a2a2a; /* Subtle dark grey for the scroll track thumb */
+  border-radius: 10px; /* Fully rounds the scrollbar edges */
+  transition: background 0.2s ease-in-out;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c5f250; /* Glows into your signature neon lime-green on hover! */
+  box-shadow: 0 0 10px rgba(197, 242, 80, 0.5); /* Subtle neon glow effect */
+}
+
+/* For Firefox (Standard CSS Support) */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a #0b0e13;
+}
+
+/* ---------------- REMOVE PLATFORM WATERMARK ---------------- */
+
+/* Target elements by class name containing 'Emergent' or matching platform signatures */
+[class*="Emergent"],
+[class*="emergent"],
+div[style*="position: fixed"][style*="bottom"] button,
+div[style*="position: fixed"][style*="bottom"] a {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ---------------- TERMINATE FLOATING WATERMARK ---------------- */
+
+/* Target the floating container element at the root document layer */
+div[style*="position: fixed"][style*="bottom:"][style*="right:"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hard target the exact container structural signatures */
+#emergent-badge-root,
+.emergent-badge,
+[class*="MadeWithEmergent"],
+[class*="EmergentBadge"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@keyframes introFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes introSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes introSlideUpDelay {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  35% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes introScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes introLoader {
+  0% {
+    width: 0%;
+    opacity: 0.4;
+  }
+
+  15% {
+    width: 18%;
+    opacity: 1;
+  }
+
+  45% {
+    width: 52%;
+    opacity: 1;
+  }
+
+  75% {
+    width: 82%;
+    opacity: 1;
+  }
+
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes brandLetterIn {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.82) rotateX(40deg);
+    filter: blur(6px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03) rotateX(0deg);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes brandShimmerSweep {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(120%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes brandUnderlineDraw {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+
+  100% {
+    width: min(220px, 72vw);
+    opacity: 1;
+  }
+}
+
+@keyframes brandOrbPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+
+  50% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+@keyframes brandChipIn {
+  0% {
+    opacity: 0;
+    transform: translateX(10px) scale(0.85);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes brandTaglineIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.55em;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.42em;
+  }
+}
+
+.intro-brand-letter {
+  display: inline-block;
+  opacity: 0;
+  transform-origin: center bottom;
+  animation: brandLetterIn 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.intro-brand-letter-accent {
+  text-shadow:
+    0 0 24px rgba(197, 242, 80, 0.35),
+    0 0 48px rgba(197, 242, 80, 0.15);
+}
+
+.intro-brand-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(197, 242, 80, 0.08) 44%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(197, 242, 80, 0.08) 56%,
+    transparent 62%,
+    transparent 100%
+  );
+  animation: brandShimmerSweep 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
+  mix-blend-mode: screen;
+}
+
+.intro-brand-underline {
+  animation: brandUnderlineDraw 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.82s forwards;
+}
+
+.intro-brand-orb {
+  animation: brandOrbPulse 3.2s ease-in-out infinite;
+}
+
+.intro-brand-chip {
+  animation: brandChipIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+}
+
+.intro-brand-tagline {
+  animation: brandTaglineIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.05s forwards;
+}
+
+.intro-welcome-name {
+  opacity: 0;
+  animation: introSlideUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
+}
+
+.intro-welcome-company {
+  opacity: 0;
+  animation: introSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 1.95s forwards;
+}
+
+.intro-welcome-desc {
+  opacity: 0;
+  animation: introSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+}
+
+.intro-welcome-divider {
+  opacity: 0;
+  animation: introSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.35s forwards;
+}
+
+.intro-welcome-loader {
+  opacity: 0;
+  animation: introSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 2.5s forwards;
+}
+
+.intro-namegate-welcome {
+  opacity: 0;
+  animation: introSlideUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
+}

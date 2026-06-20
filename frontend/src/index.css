@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #212121;
+  --bg-sidebar: #171717;
+  --bg-input: #2a2a2a;
+  --border: #2f2f2f;
+  --border-strong: #3a3a3a;
+  --text: #ececec;
+  --text-muted: #9b9b9b;
+  --text-dim: #6e6e6e;
+  --accent: #c5f250;
+  --accent-soft: rgba(197, 242, 80, 0.12);
+  --success: #10b981;
+  --danger: #ef6b6b;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-canvas);
+  color: var(--text);
+  font-family:
+    "Inter",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  font-feature-settings:
+    "cv11" 1,
+    "ss01" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+.font-serif-display {
+  font-family:
+    "Instrument Serif", "Cormorant Garamond", "Times New Roman", serif;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", "IBM Plex Mono", Menlo, monospace !important;
+}
+
+/* Shadcn shims (kept minimal) */
+@layer base {
+  :root {
+    --background: 0 0% 13%;
+    --foreground: 0 0% 93%;
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 93%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 73 90% 63%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 93%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 73 90% 63%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 50% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 73 90% 63%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+/* ---------------- TERMINATE FLOATING WATERMARK ---------------- */
+
+/* Target the floating container element at the root document layer */
+div[style*="position: fixed"][style*="bottom:"][style*="right:"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hard target the exact container structural signatures */
+#emergent-badge-root,
+.emergent-badge,
+[class*="MadeWithEmergent"],
+[class*="EmergentBadge"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

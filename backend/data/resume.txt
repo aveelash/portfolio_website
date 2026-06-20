@@ -1,0 +1,7 @@
+Aveelash Hota is applying for DevOps, SRE, Cloud, and Platform Engineering roles.
+
+He has worked with AWS, Kubernetes, Docker, CI/CD, Linux, Python, Terraform, monitoring, and backend infrastructure.
+
+He has experience with EKS provisioning, Kubernetes deployments, CI/CD automation, blue-green deployments, and basic production monitoring.
+
+He likes infrastructure work that makes releases safer, reduces manual effort, improves visibility, and keeps production boring.

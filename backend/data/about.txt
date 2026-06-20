@@ -1,0 +1,1 @@
+Aveelash is early in his career but serious about DevOps and infrastructure. He likes clean automation, reliable systems, safe deployments, and production stability. He learns by building, breaking, debugging, and improving systems.
