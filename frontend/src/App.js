@@ -164,55 +164,6 @@ function App() {
   }, [showIntro, showNameGate, visitorLoaded]);
 
   /* FIXED: ANTI-WATERMARK WATCHDOG ENGINE */
-  useEffect(() => {
-    const destroyWatermark = () => {
-      const floatingDivs = document.querySelectorAll(
-        'div[style*="position: fixed"]',
-      );
-
-      floatingDivs.forEach((div) => {
-        if (
-          (div.style.bottom && div.style.right) ||
-          (div.innerText &&
-            div.innerText.toLowerCase().includes("made with")) ||
-          div.innerHTML.toLowerCase().includes("emergent")
-        ) {
-          div.style.setProperty("display", "none", "important");
-          div.style.setProperty("visibility", "hidden", "important");
-          div.style.setProperty("opacity", "0", "important");
-          div.style.setProperty("pointer-events", "none", "important");
-          div.remove();
-        }
-      });
-
-      const specificBadges = document.querySelectorAll(
-        '[class*="emergent"], [class*="Emergent"], [id*="emergent"], [class*="badge"]',
-      );
-
-      specificBadges.forEach((badge) => {
-        if (
-          badge.innerText &&
-          badge.innerText.toLowerCase().includes("made with")
-        ) {
-          badge.style.setProperty("display", "none", "important");
-          badge.remove();
-        }
-      });
-    };
-
-    destroyWatermark();
-
-    const observer = new MutationObserver(() => {
-      destroyWatermark();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   /* AUTO SCROLL */
   useEffect(() => {
