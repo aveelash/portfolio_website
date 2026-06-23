@@ -438,7 +438,7 @@ Portfolio context:
 Recruiter question:
 {user_prompt}
 
-Answer in 180 to 300 words.
+Answer in 500 words.
 Use a natural recruiter-friendly tone.
 Avoid markdown headings like ###.
 Use short paragraphs and 3 to 5 bullets maximum.
