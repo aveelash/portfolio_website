@@ -418,7 +418,7 @@ async def chat(chat_request: ChatRequest, http_request: Request):
 
         company_context = get_company_context(
             prompt=user_prompt,
-            fallback_company_name=visitor_info.get("company"),
+            fallback_company_name=starting_page_company,
         )
 
         final_prompt = f"""
