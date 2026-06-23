@@ -32,9 +32,9 @@ api_router = APIRouter(prefix="/api")
 
 # ---------------- RATE LIMIT CONFIG ----------------
 
-CHAT_LIMIT_PER_IP_PER_HOUR = int(os.getenv("CHAT_LIMIT_PER_IP_PER_HOUR", "5"))
-CHAT_LIMIT_PER_IP_PER_DAY = int(os.getenv("CHAT_LIMIT_PER_IP_PER_DAY", "5"))
-CHAT_GLOBAL_DAILY_LIMIT = int(os.getenv("CHAT_GLOBAL_DAILY_LIMIT", "40"))
+CHAT_LIMIT_PER_IP_PER_HOUR = int(os.getenv("CHAT_LIMIT_PER_IP_PER_HOUR", "50"))
+CHAT_LIMIT_PER_IP_PER_DAY = int(os.getenv("CHAT_LIMIT_PER_IP_PER_DAY", "100"))
+CHAT_GLOBAL_DAILY_LIMIT = int(os.getenv("CHAT_GLOBAL_DAILY_LIMIT", "500"))
 
 ONE_HOUR_SECONDS = 60 * 60
 ONE_DAY_SECONDS = 24 * 60 * 60
