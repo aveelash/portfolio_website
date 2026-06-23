@@ -341,6 +341,14 @@ function App() {
           },
           body: JSON.stringify({
             user_id: userId,
+            visitor_name:
+              displayVisitorName ||
+              localStorage.getItem("candidateVisitorName") ||
+              null,
+            visitor_company:
+              displayVisitorCompany ||
+              localStorage.getItem("candidateVisitorCompany") ||
+              null,
             prompt,
           }),
         });
@@ -407,7 +415,7 @@ function App() {
         );
       }
     },
-    [userId, getRelatedPrompts],
+    [userId, getRelatedPrompts, displayVisitorName, displayVisitorCompany],
   );
 
   /* COMMAND HANDLER */

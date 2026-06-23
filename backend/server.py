@@ -280,6 +280,8 @@ PRIVATE_OR_RANDOM_KEYWORDS = [
 
 class ChatRequest(BaseModel):
     user_id: str | None = None
+    visitor_name: str | None = None
+    visitor_company: str | None = None
     prompt: str
 
 
@@ -404,6 +406,11 @@ async def chat(chat_request: ChatRequest, http_request: Request):
     try:
         visitor_info = get_visitor_info(chat_request.user_id)
 
+        starting_page_company = (
+            chat_request.visitor_company
+            or visitor_info.get("company")
+        )
+
         portfolio_context_prompt = build_prompt(
             user_id=chat_request.user_id,
             user_prompt=user_prompt,
@@ -417,6 +424,10 @@ async def chat(chat_request: ChatRequest, http_request: Request):
         final_prompt = f"""
 {SYSTEM_PROMPT}
 
+Visitor context:
+Visitor name: {chat_request.visitor_name or visitor_info.get("name") or "Unknown"}
+Visitor company from starting page: {starting_page_company or "Unknown"}
+
 Company context:
 {company_context if company_context else "No specific company context provided."}
 
@@ -426,9 +437,14 @@ Portfolio context:
 Recruiter question:
 {user_prompt}
 
-Answer professionally in 1000 words or less.
+Answer in 180 to 300 words.
+Use a natural recruiter-friendly tone.
+Avoid markdown headings like ###.
+Use short paragraphs and 3 to 5 bullets maximum.
+Be specific but do not sound exaggerated.
 
 If company context is provided, connect Aveelash's skills and experience to that company's engineering needs.
+If the recruiter says "the company", "this company", or asks "why is Aveelash a good fit" without naming a company, use the visitor company from the starting page.
 Do not invent company facts beyond the company context.
 If the company is unknown, give a general but practical company-fit answer.
 """
