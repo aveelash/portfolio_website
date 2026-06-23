@@ -402,12 +402,17 @@ async def chat(chat_request: ChatRequest, http_request: Request):
         }
 
     try:
+        visitor_info = get_visitor_info(chat_request.user_id)
+
         portfolio_context_prompt = build_prompt(
             user_id=chat_request.user_id,
             user_prompt=user_prompt,
         )
 
-        company_context = get_company_context(user_prompt)
+        company_context = get_company_context(
+            prompt=user_prompt,
+            fallback_company_name=visitor_info.get("company"),
+        )
 
         final_prompt = f"""
 {SYSTEM_PROMPT}
