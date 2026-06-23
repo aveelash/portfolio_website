@@ -427,6 +427,7 @@ async def chat(chat_request: ChatRequest, http_request: Request):
 Visitor context:
 Visitor name: {chat_request.visitor_name or visitor_info.get("name") or "Unknown"}
 Visitor company from starting page: {starting_page_company or "Unknown"}
+Company being evaluated: {starting_page_company or "Unknown"}
 
 Company context:
 {company_context if company_context else "No specific company context provided."}
@@ -445,6 +446,8 @@ Be specific but do not sound exaggerated.
 
 If company context is provided, connect Aveelash's skills and experience to that company's engineering needs.
 If the recruiter says "the company", "this company", or asks "why is Aveelash a good fit" without naming a company, use the visitor company from the starting page.
+If a company name is available from the starting page, explicitly mention that company name in the first sentence.
+Do not answer generically as "companies" or "organizations" when a company name is available.
 Do not invent company facts beyond the company context.
 If the company is unknown, give a general but practical company-fit answer.
 """
