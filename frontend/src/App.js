@@ -4,11 +4,12 @@ import { ChatHero } from "./components/ChatHero";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
 import { IntroBrand } from "./components/IntroBrand";
+import { apiUrl } from "./utils/api";
 
 let _id = 0;
 const nextId = () => ++_id;
 
-import { apiUrl } from "./utils/api";
+const MAX_QUESTIONS_PER_CHAT = 10;
 
 /* ---------------- COMMAND MAP ---------------- */
 
@@ -162,8 +163,6 @@ function App() {
 
     return () => clearTimeout(timer);
   }, [showIntro, showNameGate, visitorLoaded]);
-
-  /* FIXED: ANTI-WATERMARK WATCHDOG ENGINE */
 
   /* AUTO SCROLL */
   useEffect(() => {
@@ -347,7 +346,16 @@ function App() {
         });
 
         if (!response.ok) {
-          throw new Error("Backend chat request failed");
+          let errorMessage = "Could not get an answer right now. Please try again.";
+
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.detail || errorMessage;
+          } catch (_) {
+            // keep fallback message
+          }
+
+          throw new Error(errorMessage);
         }
 
         const data = await response.json();
@@ -387,7 +395,9 @@ function App() {
                       ? {
                           id: loadingMessageId,
                           type: "error",
-                          text: "Could not get an answer right now. Please try again.",
+                          text:
+                            error.message ||
+                            "Could not get an answer right now. Please try again.",
                         }
                       : m,
                   ),
@@ -439,6 +449,42 @@ function App() {
         } else {
           sessionId = createSession(input);
         }
+      }
+
+      const selectedSession = sessions.find(
+        (s) => String(s.id) === String(sessionId),
+      );
+
+      const currentQuestionCount =
+        selectedSession?.messages?.filter((m) => m.type === "user").length || 0;
+
+      const isCommand = input.startsWith("/");
+
+      if (!isCommand && currentQuestionCount >= MAX_QUESTIONS_PER_CHAT) {
+        const limitNotice =
+          "This chat has reached 10 questions. Please start a New Chat to ask more questions. Your daily usage limit still applies across all chats.";
+
+        setSessions((prev) =>
+          prev.map((s) =>
+            String(s.id) === String(sessionId)
+              ? {
+                  ...s,
+                  messages: s.messages.some((m) => m.text === limitNotice)
+                    ? s.messages
+                    : [
+                        ...s.messages,
+                        {
+                          id: nextId(),
+                          role: "system",
+                          text: limitNotice,
+                        },
+                      ],
+                }
+              : s,
+          ),
+        );
+
+        return;
       }
 
       const userMessage = {

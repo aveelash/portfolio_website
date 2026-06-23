@@ -12,7 +12,6 @@ import logging
 
 from services.context_loader import get_visitor_info, build_prompt
 from services.llm_provider import get_llm_provider
-from services.company_research import get_company_context
 from services.document_handler import (
     DOCUMENTS,
     build_attachments,
@@ -66,11 +65,12 @@ def prune_old_entries(history: deque, window_seconds: int) -> None:
         history.popleft()
 
 
-def is_chat_limit_reached(request: Request) -> str | None:
+def check_and_register_chat_limit(request: Request) -> str | None:
     """
-    Checks whether the visitor/site is already over limit.
-    Does not register usage here.
-    Usage is registered only after the AI provider successfully returns an answer.
+    Returns None if allowed.
+    Returns a message if blocked.
+
+    This runs before Gemini is called.
     """
     now = time.time()
     client_ip = get_client_ip(request)
@@ -85,7 +85,7 @@ def is_chat_limit_reached(request: Request) -> str | None:
             1 for timestamp in user_history if now - timestamp <= ONE_HOUR_SECONDS
         )
 
-        # Check daily first. If hour=5 and day=5, the 6th request says daily limit.
+        # Check daily first. If hour=5 and day=5, 6th question should say daily limit.
         if len(user_history) >= CHAT_LIMIT_PER_IP_PER_DAY:
             return (
                 "You have reached today's chat limit for this portfolio assistant. "
@@ -106,20 +106,10 @@ def is_chat_limit_reached(request: Request) -> str | None:
                 "Please try again tomorrow, or contact Aveelash directly."
             )
 
-    return None
-
-
-def register_successful_chat(request: Request) -> None:
-    """
-    Registers usage only after the AI provider successfully returns an answer.
-    Failed AI/rate-limit attempts do not consume your custom chat quota.
-    """
-    now = time.time()
-    client_ip = get_client_ip(request)
-
-    with rate_limit_lock:
-        ip_chat_history[client_ip].append(now)
+        user_history.append(now)
         global_chat_history.append(now)
+
+    return None
 
 
 SYSTEM_PROMPT = """
@@ -367,7 +357,7 @@ async def download_document(doc_type: str):
 @api_router.post("/chat", response_model=ChatResponse)
 async def chat(chat_request: ChatRequest, http_request: Request):
     user_prompt = chat_request.prompt.strip()
-    provider_name = os.environ.get("LLM_PROVIDER", "auto")
+    provider_name = os.environ.get("LLM_PROVIDER", "gemini")
 
     if not user_prompt:
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
@@ -393,7 +383,7 @@ async def chat(chat_request: ChatRequest, http_request: Request):
             "attachments": build_attachments(requested_documents),
         }
 
-    limit_message = is_chat_limit_reached(http_request)
+    limit_message = check_and_register_chat_limit(http_request)
     if limit_message:
         return {
             "answer": limit_message,
@@ -407,13 +397,8 @@ async def chat(chat_request: ChatRequest, http_request: Request):
             user_prompt=user_prompt,
         )
 
-        company_context = get_company_context(user_prompt)
-
         final_prompt = f"""
 {SYSTEM_PROMPT}
-
-Company context:
-{company_context if company_context else "No specific company context provided."}
 
 Portfolio context:
 {portfolio_context_prompt}
@@ -421,17 +406,11 @@ Portfolio context:
 Recruiter question:
 {user_prompt}
 
-Answer professionally in 1000 words or less.
-
-If company context is provided, connect Aveelash's skills and experience to that company's engineering needs.
-Do not invent company facts beyond the company context.
-If the company is unknown, give a general but practical company-fit answer.
+Answer professionally in 1000 words or less:
 """
 
         llm = get_llm_provider()
         answer = llm.generate_answer(final_prompt)
-
-        register_successful_chat(http_request)
 
         return {
             "answer": answer,
@@ -439,18 +418,7 @@ If the company is unknown, give a general but practical company-fit answer.
             "attachments": [],
         }
 
-    except RuntimeError as error:
-        logging.exception("Chat request failed")
-
-        return {
-            "answer": (
-                "The AI assistant is temporarily unavailable because the selected AI provider is rate-limiting requests right now. "
-                "Please try again in a few minutes. You can still view Aveelash's resume, projects, skills, "
-                "education, certifications, and contact details from the portfolio."
-            ),
-            "provider": provider_name,
-            "attachments": [],
-        }
+    
 
     except Exception as error:
         logging.exception("Chat request failed")

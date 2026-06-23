@@ -1,0 +1,66 @@
+{
+  "myntra": {
+  "name": "Myntra",
+  "industry": "Fashion e-commerce",
+  "roles_researched": [
+    "DevOps Engineer",
+    "Site Reliability Engineer",
+    "Senior Site Reliability Engineer",
+    "DevOps / Cloud Engineer"
+  ],
+  "engineering_context": "Myntra runs a large fashion e-commerce platform where production uptime, cloud infrastructure reliability, scalable Kubernetes platforms, secure infrastructure, monitoring, automation, deployment safety, and incident response are important. Public DevOps and SRE job descriptions for Myntra mention secure and resilient infrastructure design, highly scalable cloud systems, infrastructure provisioning, demand forecasting, capacity planning, right-sizing, observability, availability, reliability, performance, latency, monitoring, CI/CD pipelines, incident response, peer reviews, and blameless postmortems.",
+  "devops_sre_cloud_signals": [
+    "Secure, resilient, and highly scalable infrastructure",
+    "Kubernetes cluster architecture including multi-cluster and HA setups",
+    "Terraform-based Infrastructure as Code with modules and remote state",
+    "Cloud architecture across AWS, Azure, and GCP",
+    "CI/CD pipeline orchestration",
+    "Infrastructure provisioning automation",
+    "Demand forecasting, capacity planning, and right-sizing",
+    "Observability, monitoring, logging, performance, and latency improvements",
+    "Production availability, scalability, and reliability",
+    "Sustainable incident response and blameless postmortems",
+    "Security controls and production security best practices",
+    "Python, Bash, Shell, Golang, and Perl scripting",
+    "Ansible, Chef, Puppet, Salt, and other configuration management tools",
+    "Prometheus, Grafana, ELK/EFK, Icinga2, Sensu, Graphite, Nagios, New Relic",
+    "Docker, containers, Linux, Windows, Unix, OpenStack, and virtualization",
+    "Load balancers and web servers such as HAProxy, Nginx, Tomcat, and Apache",
+    "CDN and WAF exposure including Akamai",
+    "Database infrastructure awareness including MySQL and Cassandra"
+  ],
+  "company_engineering_needs": "Myntra's DevOps and SRE teams appear to focus on keeping production infrastructure reliable, scalable, secure, observable, and automated. The work involves maintaining cloud infrastructure, managing Kubernetes clusters, improving deployment systems, building automation, monitoring production health, handling incidents sustainably, managing uptime SLAs, and supporting engineering teams with self-service infrastructure tools.",
+  "why_aveelash_fits": "Aveelash is a strong fit for Myntra's DevOps/SRE/Cloud direction because his background connects directly with cloud infrastructure, Kubernetes, Docker, CI/CD, backend systems, automation, and production reliability. His experience with AWS, deployment workflows, backend engineering, monitoring-oriented thinking, and ownership of infrastructure-heavy problems maps well to Myntra's need for engineers who can improve availability, scalability, automation, and operational excellence. For a high-traffic e-commerce platform like Myntra, his ability to work across backend, infrastructure, and reliability problems is especially relevant.",
+  "answer_angle": "When answering why Aveelash is a good fit for Myntra, connect his AWS, Kubernetes, Docker, CI/CD, backend, automation, and reliability experience to Myntra's needs around scalable infrastructure, Kubernetes platforms, observability, incident response, deployment safety, uptime, and e-commerce traffic spikes. Keep the answer practical and recruiter-friendly. Do not claim he has 7 years of experience or deep senior SRE leadership experience. Position him as someone whose hands-on backend and infrastructure experience maps well to Myntra's DevOps/SRE environment."
+},
+  "amazon": {
+    "name": "Amazon",
+    "industry": "E-commerce, cloud, logistics, and distributed systems",
+    "engineering_context": "Amazon operates large-scale distributed systems across e-commerce, cloud infrastructure, payments, logistics, and customer-facing applications. Engineering teams care deeply about reliability, automation, scalability, observability, deployment safety, and operational ownership.",
+    "why_aveelash_fits": "Aveeelash's DevOps and cloud background, especially around AWS, Kubernetes, Docker, CI/CD, infrastructure automation, and reliability, makes him relevant for teams that need engineers who can support scalable and dependable systems."
+  },
+  "flipkart": {
+    "name": "Flipkart",
+    "industry": "E-commerce",
+    "engineering_context": "Flipkart runs large-scale e-commerce systems where platform stability, search/discovery, checkout reliability, order flows, traffic spikes, app performance, and backend infrastructure are important. DevOps and SRE work matters because the business depends on uptime, release safety, monitoring, and scalable cloud infrastructure.",
+    "why_aveelash_fits": "Aveeelash's experience with cloud infrastructure, Kubernetes, Docker, CI/CD automation, backend engineering, and production-focused ownership aligns well with the reliability and platform needs of a large e-commerce company like Flipkart."
+  },
+  "zerodha": {
+    "name": "Zerodha",
+    "industry": "Fintech and trading platforms",
+    "engineering_context": "Zerodha operates in fintech, where reliability, security, uptime, latency, monitoring, incident response, and operational discipline are extremely important. Trading and financial platforms need careful infrastructure, safe deployments, strong observability, and dependable backend systems.",
+    "why_aveelash_fits": "Aveeelash's interest and experience in reliable systems, backend infrastructure, cloud, monitoring, automation, and production ownership are relevant to fintech environments where trust, uptime, and operational maturity matter."
+  },
+  "swiggy": {
+    "name": "Swiggy",
+    "industry": "Food delivery, quick commerce, and logistics",
+    "engineering_context": "Swiggy depends on real-time ordering, delivery logistics, partner systems, customer apps, payments, and high-availability backend services. Platform, DevOps, and SRE work is important for handling traffic spikes, deployment reliability, monitoring, scaling, and incident response.",
+    "why_aveelash_fits": "Aveeelash's cloud, Kubernetes, Docker, CI/CD, backend, and reliability-focused experience can map well to Swiggy's need for stable, scalable, and observable production systems."
+  },
+  "default": {
+    "name": "the company",
+    "industry": "Technology-driven business",
+    "engineering_context": "This company likely needs reliable backend systems, stable deployments, cloud infrastructure, monitoring, automation, and strong engineering ownership. DevOps, SRE, Cloud, and Platform Engineering work helps teams ship faster while keeping production systems dependable.",
+    "why_aveelash_fits": "Aveeelash's experience with AWS, Kubernetes, Docker, CI/CD, backend systems, infrastructure automation, and production reliability makes him relevant for engineering teams that care about dependable systems and ownership."
+  }
+}
