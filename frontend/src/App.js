@@ -1,9 +1,16 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { Menu, Plus } from "lucide-react";
 import "@/App.css";
 import { ChatHero } from "./components/ChatHero";
 import { ChatInput } from "./components/ChatInput";
 import { ChatMessage } from "./components/ChatMessage";
 import { IntroBrand } from "./components/IntroBrand";
+import { SessionSidebar } from "./components/SessionSidebar";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+} from "./components/ui/sheet";
 import { apiUrl } from "./utils/api";
 
 let _id = 0;
@@ -82,6 +89,7 @@ function App() {
   const [userId, setUserId] = useState(null);
   const [isThinking, setIsThinking] = useState(false);
   const [isStackExpanded, setIsStackExpanded] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const endRef = useRef(null);
 
@@ -554,10 +562,20 @@ function App() {
     }
   };
 
+  const handleNewChat = () => {
+    setActiveSessionId(null);
+    setMobileSidebarOpen(false);
+  };
+
+  const handleSelectSession = (id) => {
+    setActiveSessionId(id);
+    setMobileSidebarOpen(false);
+  };
+
   /* ---------------- NAME GATE UI ---------------- */
   if (showNameGate) {
     return (
-      <div className="min-h-screen h-[100dvh] w-full bg-[#07090d] text-white flex items-center justify-center overflow-hidden px-4">
+      <div className="min-h-screen h-[100dvh] w-full bg-[#07090d] text-white flex items-center justify-center overflow-hidden px-4 safe-top safe-bottom safe-x">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,242,80,0.10),transparent_34%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.03),transparent_45%,rgba(0,0,0,0.25))]" />
 
@@ -627,7 +645,7 @@ function App() {
   /* ---------------- INTRO UI ---------------- */
   if (showIntro) {
     return (
-      <div className="min-h-screen h-[100dvh] w-full bg-[#07090d] text-white flex items-center justify-center overflow-hidden px-4">
+      <div className="min-h-screen h-[100dvh] w-full bg-[#07090d] text-white flex items-center justify-center overflow-hidden px-4 safe-top safe-bottom safe-x">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,242,80,0.10),transparent_34%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.03),transparent_45%,rgba(0,0,0,0.25))]" />
 
@@ -678,177 +696,80 @@ function App() {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen h-[100dvh] w-full flex bg-[#0b0e13] text-white overflow-hidden">
-      {/* ---------------- SIDEBAR ---------------- */}
-      <div className="hidden md:flex md:w-[260px] lg:w-[280px] bg-[#07090d] border-r border-[#242833] flex-col flex-shrink-0 h-full overflow-hidden">
-        <div className="p-4 border-b border-[#1f2430]">
-          <button
-            onClick={() => setActiveSessionId(null)}
-            className="
-              w-full
-              group
-              relative
-              overflow-hidden
-              bg-[#C5F250]
-              text-black
-              font-semibold
-              rounded-xl
-              px-4
-              py-3
-              text-sm
-              transition-all
-              duration-200
-              hover:bg-[#d7ff65]
-              hover:shadow-[0_0_24px_rgba(197,242,80,0.25)]
-              active:scale-[0.98]
-            "
-          >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              <span className="text-lg leading-none">+</span>
-              New Chat
-            </span>
-
-            <span className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-          </button>
-        </div>
-
-        <div className="px-4 pt-4 pb-2">
-          <div className="flex items-center justify-between">
-            <div className="text-[11px] uppercase tracking-[0.25em] text-[#7f8796]">
-              Recents
-            </div>
-
-            <div className="text-[11px] text-[#4f5665]">{sessions.length}</div>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-3 pb-4 space-y-1 global-scrollbar">
-          {sessions.length === 0 ? (
-            <div className="mt-6 px-3 py-4 rounded-xl border border-dashed border-[#2a3040] bg-[#0d1118] text-center">
-              <div className="text-[#7f8796] text-sm">No chats yet</div>
-              <div className="text-[#4f5665] text-xs mt-1">
-                Start with a prompt below
-              </div>
-            </div>
-          ) : (
-            sessions.map((s) => {
-              const isActive = String(s.id) === String(activeSessionId);
-
-              return (
-                <div
-                  key={s.id}
-                  className={`
-                    group
-                    relative
-                    flex
-                    items-center
-                    gap-2
-                    rounded-xl
-                    px-3
-                    py-2
-                    text-sm
-                    transition-all
-                    duration-200
-                    border
-                    ${
-                      isActive
-                        ? "bg-[#C5F250]/10 border-[#C5F250]/35 shadow-[0_0_22px_rgba(197,242,80,0.08)]"
-                        : "bg-transparent border-transparent hover:bg-[#111722] hover:border-[#252c3a]"
-                    }
-                  `}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setActiveSessionId(s.id)}
-                    className="flex min-w-0 flex-1 items-center gap-2 text-left"
-                    title={s.title}
-                  >
-                    <span
-                      className={`
-                        h-1.5
-                        w-1.5
-                        rounded-full
-                        flex-shrink-0
-                        ${
-                          isActive
-                            ? "bg-[#C5F250] shadow-[0_0_10px_rgba(197,242,80,0.75)]"
-                            : "bg-[#3a4252] group-hover:bg-[#C5F250]/70"
-                        }
-                      `}
-                    />
-
-                    <span
-                      className={`
-                        truncate
-                        ${
-                          isActive
-                            ? "text-[#f5f5f5]"
-                            : "text-[#b8beca] group-hover:text-[#f5f5f5]"
-                        }
-                      `}
-                    >
-                      {s.title || "New Chat"}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => deleteSession(s.id)}
-                    className={`
-                      w-6
-                      h-6
-                      rounded-md
-                      flex
-                      items-center
-                      justify-center
-                      transition-all
-                      flex-shrink-0
-                      ${
-                        isActive
-                          ? "opacity-100 text-[#8f98a8] hover:text-red-300 hover:bg-red-500/10"
-                          : "opacity-0 group-hover:opacity-100 text-[#697284] hover:text-red-300 hover:bg-red-500/10"
-                      }
-                    `}
-                    title="Delete chat"
-                  >
-                    ✕
-                  </button>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        <div className="p-4 border-t border-[#1f2430] bg-[#080b10]">
-          <div className="rounded-xl bg-[#0d1118] border border-[#202634] px-3 py-3">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#C5F250] animate-pulse" />
-              <div className="text-xs text-[#d6d9df]">Portfolio Agent</div>
-            </div>
-
-            <div className="text-[11px] text-[#697284] mt-1 leading-relaxed">
-              Ask about projects, skills, experience, or company fit.
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen h-[100dvh] w-full flex bg-[#0b0e13] text-white overflow-hidden safe-top">
+      {/* ---------------- DESKTOP SIDEBAR ---------------- */}
+      <div className="hidden md:flex md:w-[240px] lg:w-[280px] bg-[#07090d] border-r border-[#242833] flex-col flex-shrink-0 h-full overflow-hidden">
+        <SessionSidebar
+          sessions={sessions}
+          activeSessionId={activeSessionId}
+          onNewChat={handleNewChat}
+          onSelectSession={handleSelectSession}
+          onDeleteSession={deleteSession}
+        />
       </div>
+
+      {/* ---------------- MOBILE SIDEBAR DRAWER ---------------- */}
+      <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
+        <SheetContent
+          side="left"
+          className="w-[min(88vw,320px)] p-0 border-[#242833] bg-[#07090d] text-white [&>button]:text-[#b8beca] [&>button]:hover:text-white"
+        >
+          <SheetTitle className="sr-only">Chat history</SheetTitle>
+          <SessionSidebar
+            sessions={sessions}
+            activeSessionId={activeSessionId}
+            onNewChat={handleNewChat}
+            onSelectSession={handleSelectSession}
+            onDeleteSession={deleteSession}
+          />
+        </SheetContent>
+      </Sheet>
 
       {/* ---------------- MAIN WORKSPACE ---------------- */}
       <div
         onClick={handleWorkspaceClick}
-        className="flex-1 flex flex-col relative h-full max-h-screen overflow-hidden cursor-text min-w-0"
+        className="flex-1 flex flex-col relative h-full max-h-[100dvh] overflow-hidden cursor-text min-w-0"
       >
-        <div className="px-4 md:px-6 py-3 border-b border-[#2a2a2a] text-xs md:text-sm text-gray-400 bg-[#0b0e13] z-10 flex-shrink-0 select-none truncate">
+        {/* Mobile header */}
+        <div className="md:hidden flex items-center gap-2 px-3 py-2.5 border-b border-[#2a2a2a] bg-[#0b0e13] z-10 flex-shrink-0 safe-x">
+          <button
+            type="button"
+            onClick={() => setMobileSidebarOpen(true)}
+            className="w-9 h-9 rounded-lg border border-[#2a3040] bg-[#111722] text-[#b8beca] flex items-center justify-center shrink-0"
+            aria-label="Open chat history"
+          >
+            <Menu className="w-4 h-4" strokeWidth={2} />
+          </button>
+
+          <div className="flex-1 min-w-0 text-center text-xs text-gray-400 truncate px-1">
+            <span className="text-[#ECECEC]">AveelashGPT</span>
+            <span className="mx-1.5 text-[#3A4049]">·</span>
+            <span>for {displayVisitorCompany}</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNewChat}
+            className="w-9 h-9 rounded-lg bg-[#C5F250] text-black flex items-center justify-center shrink-0"
+            aria-label="New chat"
+          >
+            <Plus className="w-4 h-4" strokeWidth={2.5} />
+          </button>
+        </div>
+
+        {/* Desktop header */}
+        <div className="hidden md:block px-4 lg:px-6 py-3 border-b border-[#2a2a2a] text-xs lg:text-sm text-gray-400 bg-[#0b0e13] z-10 flex-shrink-0 select-none truncate safe-x">
           AveelashGPT · for {displayVisitorCompany}
         </div>
 
         {showHomeScreen ? (
-          <div className="flex-1 flex flex-col justify-between h-full overflow-hidden box-border">
+          <div className="flex-1 flex flex-col min-h-0 h-full overflow-hidden box-border">
             <div
-              className={`w-full flex-1 px-4 md:px-6 pt-4 md:pt-6 pb-3 flex flex-col items-center custom-scrollbar ${
-                isStackExpanded ? "overflow-y-auto" : "overflow-hidden"
+              className={`w-full flex-1 px-3 sm:px-4 md:px-6 pt-3 sm:pt-4 md:pt-6 pb-3 flex flex-col items-center custom-scrollbar min-h-0 ${
+                isStackExpanded ? "overflow-y-auto" : "overflow-y-auto md:overflow-hidden"
               }`}
             >
-              <div className="w-full max-w-4xl my-auto py-0">
+              <div className="w-full max-w-4xl my-auto py-2 sm:py-0">
                 <ChatHero
                   onStackToggle={setIsStackExpanded}
                   onPromptClick={runCommand}
@@ -861,7 +782,7 @@ function App() {
               </div>
             </div>
 
-            <div className="w-full max-w-2xl mx-auto px-4 md:px-10 pb-2 md:pb-3 pt-0 flex-shrink-0">
+            <div className="w-full max-w-2xl mx-auto px-3 sm:px-4 md:px-10 pb-3 md:pb-3 pt-0 flex-shrink-0 safe-bottom safe-x">
               <ChatInput
                 onSubmit={runCommand}
                 history={[]}
@@ -870,9 +791,9 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col relative min-h-0 h-full overflow-hidden">
-            <div className="absolute inset-0 bottom-[130px] md:bottom-[150px] overflow-y-auto px-3 md:px-4 pt-4 scrollbar-thin">
-              <div className="w-full max-w-2xl mx-auto space-y-6 pb-12">
+          <div className="flex-1 flex flex-col min-h-0 h-full overflow-hidden">
+            <div className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-4 pt-3 sm:pt-4 pb-4 custom-scrollbar min-h-0 safe-x">
+              <div className="w-full max-w-2xl mx-auto space-y-5 sm:space-y-6 pb-4">
                 {messages.map((b) => (
                   <ChatMessage
                     key={b.id}
@@ -894,11 +815,9 @@ function App() {
               </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-[130px] md:h-[150px] bg-[#0b0e13] pt-2 pb-4 md:pb-6 z-10 flex flex-col justify-end flex-shrink-0 overflow-visible">
-              <div className="absolute top-0 left-0 right-0 h-8 -translate-y-full bg-gradient-to-t from-[#0b0e13] to-transparent pointer-events-none" />
-
-              <div className="w-full max-w-2xl mx-auto px-3 md:px-4">
-                <div className="mb-2 flex justify-center">
+            <div className="flex-shrink-0 bg-[#0b0e13] pt-2 pb-3 sm:pb-4 md:pb-6 z-10 border-t border-[#1f242e]/60 safe-bottom safe-x">
+              <div className="w-full max-w-2xl mx-auto px-1 sm:px-2 md:px-4">
+                <div className="mb-2 hidden sm:flex justify-center">
                   <div className="rounded-full border border-[#2a2f3b] bg-[#111722]/80 px-2.5 py-1.5 text-[11px] text-[#8f98a8]">
                     Tip: type{" "}
                     <span className="text-[#C5F250] font-medium">/clear</span>{" "}

@@ -166,20 +166,20 @@ export const ChatHero = ({
       className={`relative flex flex-col items-center text-center transition-all duration-700 ${
         collapsed
           ? "opacity-0 pointer-events-none h-0 overflow-hidden"
-          : "pt-3 sm:pt-4 md:pt-6 pb-2"
+          : "pt-2 sm:pt-4 md:pt-6 pb-2"
       }`}
     >
       {/* HERO */}
-      <div className="w-full max-w-[980px] px-4">
-        <div className="text-[#C5F250] text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.22em] sm:tracking-[0.32em] uppercase">
+      <div className="w-full max-w-[980px] px-2 sm:px-4">
+        <div className="text-[#C5F250] text-[7px] sm:text-[9px] md:text-[10px] tracking-[0.18em] sm:tracking-[0.32em] uppercase">
           Cloud-Native Systems • Automation • Reliability
         </div>
 
-        <h1 className="mt-3 sm:mt-4 text-[#f5f5f5] text-[42px] sm:text-[56px] md:text-[70px] lg:text-[80px] leading-none tracking-[-0.065em]">
+        <h1 className="mt-2 sm:mt-4 text-[#f5f5f5] text-[34px] sm:text-[56px] md:text-[70px] lg:text-[80px] leading-[0.95] sm:leading-none tracking-[-0.065em] break-words">
           Aveelash Hota
         </h1>
 
-        <div className="mt-4 sm:mt-5 max-w-[760px] mx-auto text-[#C5F250] text-[16px] sm:text-[18px] md:text-[21px] lg:text-[23px] leading-snug">
+        <div className="mt-3 sm:mt-5 max-w-[760px] mx-auto text-[#C5F250] text-[15px] sm:text-[18px] md:text-[21px] lg:text-[23px] leading-snug px-1">
           I build cloud systems that scale automatically, recover instantly, and
           run reliably in production.
         </div>
@@ -191,8 +191,8 @@ export const ChatHero = ({
       </div>
 
       {/* MAIN CARD */}
-      <div className="mt-4 sm:mt-5 md:mt-6 w-full max-w-[820px] px-3">
-      <div className="rounded-3xl border border-[#202632] bg-[#0d1118]/70 shadow-[0_20px_80px_rgba(0,0,0,0.22)] px-3 sm:px-4 py-3 sm:py-4">
+      <div className="mt-4 sm:mt-5 md:mt-6 w-full max-w-[820px] px-2 sm:px-3">
+      <div className="rounded-2xl sm:rounded-3xl border border-[#202632] bg-[#0d1118]/70 shadow-[0_20px_80px_rgba(0,0,0,0.22)] px-3 sm:px-4 py-3 sm:py-4">
           {/* ENGINEERING STACK */}
           <div className="flex flex-col items-center">
             <div className="inline-flex items-center gap-3 rounded-full border border-[#2a2a2a] bg-[#111111] px-4 py-2 shadow-[0_0_28px_rgba(197,242,80,0.08)]">
@@ -437,7 +437,7 @@ export const ChatHero = ({
                   "
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C5F250]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className="relative line-clamp-1 sm:line-clamp-2">
+                  <span className="relative line-clamp-2 sm:line-clamp-2">
                     {prompt}
                   </span>
                 </button>

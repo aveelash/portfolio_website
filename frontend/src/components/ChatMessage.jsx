@@ -109,7 +109,7 @@ export const ChatMessage = ({
       <div className="flex flex-col w-full">
         <Header role="user" />
 
-        <div className="ml-9 inline-flex max-w-fit rounded-2xl bg-[#2a2a2a] border border-[#333333] px-3 py-1.5 text-[14px] text-[#ECECEC]">
+        <div className="ml-9 max-w-[calc(100%-2.25rem)] sm:max-w-[85%] md:max-w-fit inline-flex rounded-2xl bg-[#2a2a2a] border border-[#333333] px-3 py-1.5 text-[13px] sm:text-[14px] text-[#ECECEC] break-words">
           {block.text}
         </div>
       </div>
@@ -135,7 +135,7 @@ return (
   <div className="flex gap-2 items-start sm:gap-3 w-full px-1 sm:px-0">
     <Avatar role="agent" />
 
-    <div className="min-w-0 max-w-[720px] prose-chat -ml-1 sm:-ml-1">
+    <div className="min-w-0 flex-1 max-w-full sm:max-w-[720px] prose-chat">
       {block.isLoading ? (
         <ThinkingIndicator />
       ) : block.markdown ? (

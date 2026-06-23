@@ -205,9 +205,9 @@ export const ChatInput = ({
           </div>
 
           {isOverLimit ? (
-            <div className="text-red-400">Please keep it under 100 words.</div>
+            <div className="text-red-400 text-right">Keep under 100 words.</div>
           ) : (
-            <div className="text-[#4f5665]">Recruiter questions only</div>
+            <div className="hidden sm:block text-[#4f5665]">Recruiter questions only</div>
           )}
         </div>
       )}

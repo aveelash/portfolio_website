@@ -13,12 +13,12 @@ export const TopBar = () => {
       </div>
 
       <div
-        className="text-[12px] text-[#8A9099] tracking-tight"
+        className="text-[11px] sm:text-[12px] text-[#8A9099] tracking-tight truncate max-w-[50vw] sm:max-w-none text-center"
         data-testid="top-bar-title"
       >
         <span className="text-[#E7EAF0]">AveelashGPT</span>
-        <span className="mx-2 text-[#3A4049]">·</span>
-        <span>~/sre-devops-profile</span>
+        <span className="hidden sm:inline mx-2 text-[#3A4049]">·</span>
+        <span className="hidden sm:inline">~/sre-devops-profile</span>
       </div>
 
       <div className="w-[52px]" aria-hidden="true" />
