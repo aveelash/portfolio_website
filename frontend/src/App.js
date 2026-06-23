@@ -838,7 +838,7 @@ function App() {
         className="flex-1 flex flex-col relative h-full max-h-screen overflow-hidden cursor-text min-w-0"
       >
         <div className="px-4 md:px-6 py-3 border-b border-[#2a2a2a] text-xs md:text-sm text-gray-400 bg-[#0b0e13] z-10 flex-shrink-0 select-none truncate">
-          AveelashGPT · v1 · for {displayVisitorCompany}
+          AveelashGPT · for {displayVisitorCompany}
         </div>
 
         {showHomeScreen ? (

@@ -21,12 +21,7 @@ export const TopBar = () => {
         <span>~/sre-devops-profile</span>
       </div>
 
-      <div
-        className="text-[11px] text-[#8A9099] tabular-nums"
-        data-testid="top-bar-version"
-      >
-        local v1
-      </div>
+      <div className="w-[52px]" aria-hidden="true" />
     </div>
   );
 };

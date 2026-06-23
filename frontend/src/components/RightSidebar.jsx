@@ -157,9 +157,6 @@ export const RightSidebar = ({ onCommand }) => {
         </div>
       </Section>
 
-      <div className="mt-auto px-3 py-2 text-[10.5px] text-[#5a6270] leading-snug">
-        AveelashGPT · local v1
-      </div>
     </aside>
   );
 };
